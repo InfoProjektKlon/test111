@@ -97,4 +97,32 @@ int main() {
     simulationDurchführen(gesamtstrecke, anzahlAmpeln, minAbstand, maxAbstand, zusaetzlicheStrecke);
 
     return 0;
+
+    //Niko Eingabe 
+    /*
+    double t; //Gesamtzeit
+    double t1; //Zeit nach 1/4 der Strecke
+    double t2; //Zeit für den zweiten Abschnitt
+    double t3; //Wartezeit an der Ampel
+    double a; //Beschleuningung
+    double s; //Streckenlänge
+
+
+    std::cout << "Gib eine ganze Streckenlaenge in Metern ein: ";
+    std::cin >> s;
+    a = 2; //Beschleunigung 2 m/s^2
+
+    //Eine Ampelanlage bei 1/4 der Strecke
+    t1 = 2 * sqrt((2 * (1.0 / 8) * s) / a);
+    t2 = sqrt((2 * (3.0 / 4) * s) / a);
+    t3 = 60.0;
+
+    t = t1 + t2 + t3;
+
+    std::cout << "Zeit fuer den ersten Abschnitt (bis zur Ampelanlage): " << t1 << " Sekunden" << std::endl;
+    std::cout << "Die Wartezeit an der Ampel betraegt: " << t3 << " Sekunden" << std::endl;
+    std::cout << "Zeit fuer den zweiten Abschnitt (nach der Ampelanlage): " << t2 << " Sekunden" << std::endl;
+
+    std::cout << "Das Auto benoetigt " << t << " Sekunden fuer die " << s << " Meter lange Strecke.";
+    */
 }
