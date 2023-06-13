@@ -9,6 +9,9 @@ using namespace std;
 string wahlAmpel; //Eingabe der Anzahl an Ampeln
 int anzahlAmpel;//Anzahl der Ampel
 int randomAnzahlAmpel;
+string abfrageAbstandAmpel;
+double abstandAmpel;
+int randomAbstandAmpel;
 double s; //Streckenlänge
 double sAbschnitte; //Streckenlänge der Abschnitte
 double anzahlAbschnitte;
@@ -28,10 +31,42 @@ double sVMax;//Strecke bis vMax
 
 int main()
 {
+    vMax = 50;//Maximalgeschwindigkeit
+
     // Abfragen Anahl Ampeln etc.
-    cout << "Gib eine ganze Streckenlaenge in Metern ein: ";
+    cout << "Gib eine ganze Streckenlaenge in Metern ein:"<< endl;
     cin >> s;
-    cout << "Eingabe Ampel Anzahl!";
+
+    while (abfrageAbstandAmpel != "Ja" && abfrageAbstandAmpel != "Nein") {
+        cout << "Moechtest du den Abstand der Ampeln auswaehlen? Ja, fuer selber waehlen, Nein fuer random generieren."<< endl;
+        cin >> abfrageAbstandAmpel;
+
+        if (abfrageAbstandAmpel == "Ja") {
+      
+            do {
+                cout <<"Wie weit sollen die Ampeln auseinander stehen ? " << endl;
+                cin >> abstandAmpel;
+                if (abstandAmpel < 100 || abstandAmpel > 1500) {
+                    cout << "Bitte gebe einen Abstand von mindestens 100 und maximal 1500 Metern ein!" << endl;
+                }
+            } while (abstandAmpel < 100 || abstandAmpel > 1500);
+
+        }
+        else if (abfrageAbstandAmpel == "Nein") {
+            srand(static_cast<unsigned int>(time(0))); // Neue Seed-Wert bei jedem Programmstart
+            randomAbstandAmpel = rand() % 1500 + 100; // Zufällige Zahl zwischen 1 und 20
+            abstandAmpel = randomAbstandAmpel;
+            cout << "Der Abstand der Ampeln ist: " << abstandAmpel << endl;
+        }
+        else {
+            cout << "Fehler: Ungueltige Eingabe fuer die Ampelauswahl!" << endl;
+        }
+    }
+
+    anzahlAmpel = (s / abstandAmpel) - 1; //Noch nicht berücksichtig, dass hinter der letzten Ampel 150 Meter freie Fahrt sind
+    cout << "Die Anzahl der Ampeln ist: " << anzahlAmpel;
+
+    /*
     while (wahlAmpel != "Ja" && wahlAmpel != "Nein") {
         cout << "Moechtest du die Anzahl der Ampeln auswaehlen? Ja, fuer selber waehlen, Nein fuer random generieren.";
         cin >> wahlAmpel;
@@ -83,5 +118,7 @@ int main()
     cout << "Zeit fuer die Abschnitte: " << tAbschnitt << " Sekunden" << endl;
     cout << "Zeit fuer das Ende: " << tEnde << " Sekunden" << endl;
     cout << "Das Auto benoetigt " << t << " Sekunden fuer die " << s << " Meter lange Strecke.";
+
+    */
 }
 
