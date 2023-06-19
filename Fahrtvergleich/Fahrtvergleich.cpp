@@ -162,7 +162,7 @@ using namespace std;
 int StreckenLange() {
 
     int Streckelaenge;
-    cout << "Streckenlänge in M eingeben" << endl;
+    cout << "Streckenlaenge in m eingeben: " ;
     cin >> Streckelaenge;
     return Streckelaenge;
 }
@@ -182,7 +182,6 @@ struct PKW {   //Struct für alle Fahrer
     float beschleunigung1;
     float beschleunigung2;
     float beschleunigung3;
-    float aktuelle_Position;
 };
 
 int Schaltung() {
@@ -203,7 +202,7 @@ int main(){
     int eingabe;
 
     do {
-        cout << "Ampelabstand selber eingeben oder durch zufall, 1 fur zufall 2 für selber" << endl;
+        cout << "Ampelabstand selber eingeben oder durch zufall. 1 fuer zufall 2 für selber: ";
         cin >> eingabe;
         if (eingabe != 1 && eingabe != 2) {
             cout << "Fehlerhafte eingabe" << endl;
@@ -247,7 +246,7 @@ int main(){
 
                 StreckenCounter += Abstand;
                 AmpelPosition[Ampelanzahl] = StreckenCounter;
-                cout << "Noch " << Streckenlänge - AmpelPosition[Ampelanzahl] << " Meter bis zum ende der Strecke" << endl;
+                cout << "Noch " << Streckenlänge - AmpelPosition[Ampelanzahl] << " meter bis zum ende der Strecke" << endl;
                 Ampelanzahl++;
             }
             else {
@@ -262,11 +261,23 @@ int main(){
     }
     PKW PKW_A;
     PKW_A.vmax = 50;
-    PKW_A.aktuelle_Position = 0.0;
     PKW_A.beschleunigung1 = 2.0 * (2.0 / 3.0); // a * faktor
     PKW_A.beschleunigung2 = 3.0 * (2.0 / 3.0);
     PKW_A.beschleunigung3 = 6.0 * (2.0 / 3.0);
 
+    PKW PKW_B;
+    PKW_B.vmax = 50;
+    PKW_B.beschleunigung1 = 2.0 ; 
+    PKW_B.beschleunigung2 = 3.0 ;
+    PKW_B.beschleunigung3 = 6.0 ;
+
+    PKW PKW_C;
+    PKW_C.vmax = 85;
+    PKW_C.beschleunigung1 = 2.0;
+    PKW_C.beschleunigung2 = 3.0;
+    PKW_C.beschleunigung3 = 6.0;
+
+    float aktuelle_Position = 0.0;
     int aktuelle_ampel = 0;
     float Distanz = 0.0;
     float t_acc;
@@ -285,69 +296,91 @@ int main(){
     for (int i = 0; i < Ampelanzahl + 1; i++) {  //erzeugt alle Ampelzeiten für jede ampel. 
         ampelzeit[i] = Schaltung();
     }
-      //noch ein for loop für alle Fahrer notwendig
-    for (int accIndex = 1; accIndex <= 3; accIndex++) { //für alle 3 Beschleunigungen eines Fahrers
-        float acc;
-        switch (accIndex) {
+    for (int PKWIndex = 1; PKWIndex <= 3; PKWIndex++) {
+        float vmax;
+        switch (PKWIndex) {
         case 1:
-            acc = PKW_A.beschleunigung1;
-            cout << "Beschleunigung[m/s^2]: " << acc << endl;
+            vmax = PKW_A.vmax;
+            cout << "Fahrer A:" << endl;
             break;
         case 2:
-            acc = PKW_A.beschleunigung2;
-            cout << "Beschleunigung[m/s^2]: " << acc << endl;
+            vmax = PKW_B.vmax;
+            PKW_A.beschleunigung1 = PKW_B.beschleunigung1;
+            PKW_A.beschleunigung2 = PKW_B.beschleunigung2;
+            PKW_A.beschleunigung3 = PKW_B.beschleunigung3;
+            cout << "Fahrer B:" << endl;
             break;
         case 3:
-            acc = PKW_A.beschleunigung3;
-            cout << "Beschleunigung[m/s^2]: " << acc << endl;
+            vmax = PKW_C.vmax;
+            PKW_A.beschleunigung1 = PKW_C.beschleunigung1;
+            PKW_A.beschleunigung2 = PKW_C.beschleunigung2;
+            PKW_A.beschleunigung3 = PKW_C.beschleunigung3;
+            cout << "Fahrer C:" << endl;
             break;
         }
-
-
-        //Zeitberechnungen (in Bearbeitung)
-        while (aktuelle_ampel <= Ampelanzahl) {  //Abschnitt
-            Distanz = AmpelPosition[aktuelle_ampel] - PKW_A.aktuelle_Position;
-            t_acc = PKW_A.vmax / (3.6 * acc);
-            s_acc = 0.5 * acc * (t_acc * t_acc);
-            s_brake = s_acc;  //
-            t_brake = t_acc;
-            // cout << "Ampel: " << aktuelle_ampel << endl;
-            // cout << "Zeit: " << Schaltung() << endl;
-            // cout << "Ampelposition: " << AmpelPosition[aktuelle_ampel] << endl;
-            if (Distanz >= 2 * s_acc) { //vmax wird erreicht. 
-                // cout << "if" << endl;
-                s_vmax = Distanz - s_acc - s_brake; // Strecke in der vmax gefahren wird 
-                t_vmax = s_vmax/(PKW_A.vmax/3.6);
-                zwischenzeit = t_acc + t_vmax + t_brake + ampelzeit[aktuelle_ampel];
+        //noch ein for loop für alle Fahrer notwendig
+        for (int accIndex = 1; accIndex <= 3; accIndex++) { //für alle 3 Beschleunigungen eines Fahrers
+            float acc;
+            switch (accIndex) {
+            case 1:
+                acc = PKW_A.beschleunigung1;
+                cout << "  Beschleunigung[m/s^2]: " << acc << endl;
+                break;
+            case 2:
+                acc = PKW_A.beschleunigung2;
+                cout << "  Beschleunigung[m/s^2]: " << acc << endl;
+                break;
+            case 3:
+                acc = PKW_A.beschleunigung3;
+                cout << "  Beschleunigung[m/s^2]: " << acc << endl;
+                break;
             }
 
-            else { //vmax wird nicht erreicht. Sonderfall für Fahrer A bei 2m/s^2 (falls Abschnitt<144,58m)  und Fahrer C
-                //cout << "else" << endl;
-                s_acc = Distanz * 0.5;
-                s_brake = s_acc;
-                t_acc = sqrt((2 * s_acc)/acc);
+
+            //Zeitberechnungen (in Bearbeitung)
+            while (aktuelle_ampel <= Ampelanzahl) {  //Abschnitt
+                Distanz = AmpelPosition[aktuelle_ampel] - aktuelle_Position;
+                t_acc = vmax / (3.6 * acc);
+                s_acc = 0.5 * acc * (t_acc * t_acc);
+                s_brake = s_acc;  //
                 t_brake = t_acc;
-                zwischenzeit = t_acc + t_brake + ampelzeit[aktuelle_ampel];
+                // cout << "Ampel: " << aktuelle_ampel << endl;
+                // cout << "Zeit: " << Schaltung() << endl;
+                // cout << "Ampelposition: " << AmpelPosition[aktuelle_ampel] << endl;
+                if (Distanz >= 2 * s_acc) { //vmax wird erreicht. 
+                    // cout << "if" << endl;
+                    s_vmax = Distanz - s_acc - s_brake; // Strecke in der vmax gefahren wird 
+                    t_vmax = s_vmax / (vmax / 3.6);
+                    zwischenzeit = t_acc + t_vmax + t_brake + ampelzeit[aktuelle_ampel];
+                }
+
+                else { //vmax wird nicht erreicht. Sonderfall für Fahrer A bei 2m/s^2 (falls Abschnitt<144,58m)  und Fahrer C
+                    //cout << "else" << endl;
+                    s_acc = Distanz * 0.5;
+                    s_brake = s_acc;
+                    t_acc = sqrt((2 * s_acc) / acc);
+                    t_brake = t_acc;
+                    zwischenzeit = t_acc + t_brake + ampelzeit[aktuelle_ampel];
+                }
+
+                gesamtzeit += zwischenzeit;
+                aktuelle_Position = AmpelPosition[aktuelle_ampel];
+                //cout << "t_acc: " << t_acc << "t_vmax: " << t_vmax << "Ampelzeit: " << ampelzeit[aktuelle_ampel] << "Gesamtzeit: " << gesamtzeit << "s_acc: " << s_acc << "s_vmax: " << s_vmax << endl;
+                aktuelle_ampel++;
             }
-            
-            gesamtzeit += zwischenzeit;
-            PKW_A.aktuelle_Position = AmpelPosition[aktuelle_ampel];
-            //cout << "t_acc: " << t_acc << "t_vmax: " << t_vmax << "Ampelzeit: " << ampelzeit[aktuelle_ampel] << "Gesamtzeit: " << gesamtzeit << "s_acc: " << s_acc << "s_vmax: " << s_vmax << endl;
-            aktuelle_ampel++;
+            t_acc = vmax / (3.6 * acc); //damit t_150m richtig berechnet wird
+            s_acc = 0.5 * acc * (t_acc * t_acc); // s.o
+            s_150m_vmax = 150 - s_acc;
+            t_150m_vmax = s_150m_vmax / (vmax / 3.6);
+            t_150m = t_acc + t_150m_vmax; //Zeit für die letzten 150m
+            gesamtzeit += t_150m;
+            //cout << " t_acc: " << t_acc << " t_150m: " << t_150m << " s_acc: " << s_acc << "s_150m_vmax" << s_150m_vmax << endl;
+            cout << "    Gesamtzeit[s]: " << gesamtzeit << endl;
+            aktuelle_Position = 0.0; //reset 
+            aktuelle_ampel = 0; //reset
+            gesamtzeit = 0; //reset
+            zwischenzeit = 0; //reset
         }
-        t_acc = PKW_A.vmax / (3.6 * acc); //damit t_150m richtig berechnet wird
-        s_acc = 0.5 * acc * (t_acc * t_acc); // s.o
-        s_150m_vmax = 150 - s_acc; 
-        t_150m_vmax = s_150m_vmax / (PKW_A.vmax / 3.6);
-        t_150m = t_acc + t_150m_vmax; //Zeit für die letzten 150m
-        //cout << t_150m << endl;
-        gesamtzeit += t_150m;    
-        //cout << " t_acc: " << t_acc << " t_150m: " << t_150m << " s_acc: " << s_acc << "s_150m_vmax" << s_150m_vmax << endl;
-        cout << "Gesamtzeit[s]: " << gesamtzeit <<  endl; 
-        PKW_A.aktuelle_Position = 0.0; //reset 
-        aktuelle_ampel = 0; //reset
-        gesamtzeit = 0; //reset
-        zwischenzeit = 0; //reset
     }
 
 return 0;
