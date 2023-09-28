@@ -172,6 +172,7 @@ int StreckenLange() {   //Input Streckenlänge vom Benutzer
     return Streckelaenge;
 }
 
+
 int AmpelAbstand_random() {     //Zufällige Ampelabstände
     int min = 100;
     int max = 1500;
@@ -200,16 +201,161 @@ int Schaltung() {    //Zufällige Ampelzeit zwischen min und max
     return t_ampel;
 }
 
+/*
+const int window_width = 800;
+const int window_height = 600;
+class StringConverter
+{
+public:
+    static int toInt(const std::string& str)
+    {
+        std::istringstream stream(str);
+        int value;
+        stream >> value;
+        return value;
+    }
+    static std::string toString(int value) {
+        std::ostringstream stream;
+        stream << value;
+        return stream.str();
+    }
+};
+
+*/
+
 int main(){
+    
+ 
+
+    //int Streckelaenge;
+    /*
+    
+    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Fahrtvergleich");
+    window.setFramerateLimit(60);
+    tgui::Gui gui{ window };
+
+
+    // Label 1 und Box 1 // Aufgabe //
+    tgui::Label::Ptr Label1 = tgui::Label::create();
+    Label1->setPosition(50.f, 113.f);
+    Label1->setSize(210, 20);
+    Label1->setTextSize(13);
+    Label1->setText("Streckenlänge in m eingeben(Maximal 20000m):");
+    Label1->getRenderer()->setTextColor(sf::Color::Black);
+    Label1->getRenderer()->setBorders(0);
+    Label1->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
+    gui.add(Label1);
+
+    tgui::EditBox::Ptr Streckelaenge = tgui::EditBox::create();
+    Streckelaenge->setDefaultText("Ganzahlig");
+    Streckelaenge->setPosition(50.f, 130.f);
+    Streckelaenge->setSize(150, 22);
+    Streckelaenge->setTextSize(13);
+    Streckelaenge->setMaximumCharacters(5); // Muss nicht immer dabei sein macht aber sinn dann können wir gut begrenzen
+    Streckelaenge->getRenderer()->setBackgroundColor(sf::Color::White);
+    Streckelaenge->getRenderer()->setBorders(1);
+    Streckelaenge->getRenderer()->setTextColor(sf::Color::Black);
+    gui.add(Streckelaenge);
+
+    // Label 2 und Box 2 // Aufgabe //
+
+    tgui::Label::Ptr Label2 = tgui::Label::create();
+    Label2->setPosition(50.f, 163.f);
+    Label2->setSize(210, 20);
+    Label2->setTextSize(13);
+    Label2->setText("Ampelabstand selber eingeben oder durch zufall. 1 für zufall 2 für selber:");
+    Label2->getRenderer()->setTextColor(sf::Color::Black);
+    Label2->getRenderer()->setBorders(0);
+    Label2->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
+    gui.add(Label2);
+
+    tgui::EditBox::Ptr eingabe = tgui::EditBox::create();
+    eingabe->setDefaultText("1 oder 2");
+    eingabe->setPosition(50.f, 180.f);
+    eingabe->setSize(150, 22);
+    eingabe->setTextSize(13);
+    eingabe->setMaximumCharacters(1);
+    eingabe->getRenderer()->setBackgroundColor(sf::Color::White);
+    eingabe->getRenderer()->setBorders(1);
+    eingabe->getRenderer()->setTextColor(sf::Color::Black);
+    gui.add(eingabe);
+
+    
+    // Label 3 und Box 3 // Aufgabe //
+
+    tgui::Label::Ptr Label3 = tgui::Label::create();
+    Label3->setPosition(50.f, 213.f);
+    Label3->setSize(210, 20);
+    Label3->setTextSize(13);
+    Label3->setText("Abstand eingeben, zwischen 100m und 1500m:");
+    Label3->getRenderer()->setTextColor(sf::Color::Black);
+    Label3->getRenderer()->setBorders(0);
+    Label3->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
+    gui.add(Label3);
+
+    tgui::EditBox::Ptr Abstand = tgui::EditBox::create();
+    Abstand->setDefaultText("Ganzahlig");
+    Abstand->setPosition(50.f, 230.f);
+    Abstand->setSize(150, 22);
+    Abstand->setTextSize(13);
+    Abstand->setMaximumCharacters(4);
+    Abstand->getRenderer()->setBackgroundColor(sf::Color::White);
+    Abstand->getRenderer()->setBorders(1);
+    Abstand->getRenderer()->setTextColor(sf::Color::Black);
+    gui.add(Abstand);
+
+
+    // Label für die Ausgabe
+    tgui::Label::Ptr acc = tgui::Label::create();
+    acc->setPosition(370.f, 130.f);
+    acc->setSize(500, 30);
+    acc->setTextSize(16);
+    acc->setText("");
+    acc->getRenderer()->setTextColor(sf::Color::Black);
+    acc->getRenderer()->setBorders(0);
+    acc->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
+    gui.add(acc);
+
+    // Label für die Ausgabe
+    tgui::Label::Ptr gesamtzeit = tgui::Label::create();
+    gesamtzeit->setPosition(370.f, 130.f);
+    gesamtzeit->setSize(500, 30);
+    gesamtzeit->setTextSize(16);
+    gesamtzeit->setText("");
+    gesamtzeit->getRenderer()->setTextColor(sf::Color::Black);
+    gesamtzeit->getRenderer()->setBorders(0);
+    gesamtzeit->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
+    gui.add(gesamtzeit);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            gui.handleEvent(event);
+        }
+        window.clear(sf::Color(195, 195, 195, 255));
+        gui.draw();
+        window.display();
+    }
+    
+    */
+    
+    
+
     locale::global(locale("German_germany"));           //Umlaute und Potenzen in der Konsole richtig anzeigen
     srand(time(NULL));                                  //Neuer Seed. Nutzung der Systemzeit zur Generierung von Zufallszahlen.
-    int Streckenlänge = StreckenLange();
+    int Streckenlänge =  StreckenLange();
     int Ampelanzahl = 0;
     int eingabe;
-
+   
     do {
-        cout << "Ampelabstand selber eingeben oder durch zufall. 1 für zufall 2 für selber:";
-        cin >> eingabe;
+       cout << "Ampelabstand selber eingeben oder durch zufall. 1 für zufall 2 für selber:";
+       cin >> eingabe;
         if (eingabe != 1 && eingabe != 2) {
             cout << "Fehlerhafte eingabe" << endl;
         }
