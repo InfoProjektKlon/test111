@@ -1,156 +1,4 @@
 
-
-/*
-//Eingabe Niko
-#include <iostream>
-#include <Windows.h>
-#include <stdlib.h> //für random Nummern
-
-using namespace std;
-
-struct Fahrer {
-    string name;
-    double beschleunigung;
-    double Faktor;
-    bool hält_sich_an_geschwindigkeitsbegrenzung;
-};
-
-//Erzeugen der Variablen
-string wahlAmpel; //Eingabe der Anzahl an Ampeln
-int anzahlAmpel;//Anzahl der Ampel
-int randomAnzahlAmpel;
-string abfrageAbstandAmpel;
-double abstandAmpel;
-int randomAbstandAmpel;
-double s; //Streckenlänge
-double sAbschnitte; //Streckenlänge der Abschnitte
-double anzahlAbschnitte;
-double t; //Gesamtzeit
-double t1; //Zeit nach 1/4 der Strecke
-double t2; //Zeit für den zweiten Abschnitt
-double t3; //Wartezeit an der Ampel
-double tAbschnitt; //Zeit zwischen einer Ampel
-double tEnde;//Zeit von letzten Apel bis zum Ziel
-double a1; //Beschleuningung 2 m/s
-double a2; //Beschleunigung 3 m/s
-double a3; //Beschleunigung 6 m/s
-
-double vMax;//maximal Geschwindigkeit von 50 km/h
-double tVMax;//Zeit bis vMax
-double sVMax;//Strecke bis vMax
-
-
-int Schaltung() {
-
-    int min = 20;
-    int max = 60;
-
-    srand(time(NULL));
-    int ZufallSekunden = rand() % (max - min + 1) + min;
-
-    return ZufallSekunden;
-
-}
-
-
-
-int main()
-{
-   
-    vMax = 50;//Maximalgeschwindigkeit
-
-    // Abfragen Anahl Ampeln etc.
-    cout << "Gib eine ganze Streckenlaenge in Metern ein:"<< endl;
-    cin >> s;
-
-    while (abfrageAbstandAmpel != "Ja" && abfrageAbstandAmpel != "Nein") {
-        cout << "Moechtest du den Abstand der Ampeln auswaehlen? Ja, fuer selber waehlen, Nein fuer random generieren."<< endl;
-        cin >> abfrageAbstandAmpel;
-
-        if (abfrageAbstandAmpel == "Ja") {
-      
-            do {
-                cout <<"Wie weit sollen die Ampeln auseinander stehen ? " << endl;
-                cin >> abstandAmpel;
-                if (abstandAmpel < 100 || abstandAmpel > 1500) {
-                    cout << "Bitte gebe einen Abstand von mindestens 100 und maximal 1500 Metern ein!" << endl;
-                }
-            } while (abstandAmpel < 100 || abstandAmpel > 1500);
-
-        }
-        else if (abfrageAbstandAmpel == "Nein") {
-            srand(static_cast<unsigned int>(time(0))); // Neue Seed-Wert bei jedem Programmstart
-            randomAbstandAmpel = rand() % 1500 + 100; // Zufällige Zahl zwischen 1 und 20
-            abstandAmpel = randomAbstandAmpel;
-            cout << "Der Abstand der Ampeln ist: " << abstandAmpel << endl;
-        }
-        else {
-            cout << "Fehler: Ungueltige Eingabe fuer die Ampelauswahl!" << endl;
-        }
-    }
-
-    anzahlAmpel = (s / abstandAmpel) - 1; //Noch nicht berücksichtig, dass hinter der letzten Ampel 150 Meter freie Fahrt sind
-    cout << "Die Anzahl der Ampeln ist: " << anzahlAmpel << endl;
-
-    
-    while (wahlAmpel != "Ja" && wahlAmpel != "Nein") {
-        cout << "Moechtest du die Anzahl der Ampeln auswaehlen? Ja, fuer selber waehlen, Nein fuer random generieren.";
-        cin >> wahlAmpel;
-
-        if (wahlAmpel == "Ja") {
-            cout << "Wieviele Ampeln sollen auf der Strecke sein?";
-            cin >> anzahlAmpel;
-            cout << "Die Anzahl der Ampeln ist: " << anzahlAmpel << endl;
-        }
-        else if (wahlAmpel == "Nein") {
-            srand(static_cast<unsigned int>(time(0))); // Neue Seed-Wert bei jedem Programmstart
-            randomAnzahlAmpel = rand() % 20 + 1; // Zufällige Zahl zwischen 1 und 20
-            anzahlAmpel = randomAnzahlAmpel;
-            cout << "Die Anzahl der Ampeln ist: " << anzahlAmpel << endl;
-        }
-        else {
-            cout << "Fehler: Ungueltige Eingabe fuer die Ampelauswahl!" << endl;
-        }
-    }
-    
-
-    a1 = 2;
-    vMax = 50 / 3.6;
-    anzahlAbschnitte = anzahlAmpel + 1; //Anzahl Abschnitte 
-    sAbschnitte = s / anzahlAbschnitte; //Länge der Abschnitte
-    cout << "Die Anzahl der Abschnitte ist: " << anzahlAbschnitte << endl;
-    cout << "Die Laenge der Abschnitte: " << sAbschnitte << endl;
-
-    tVMax = vMax / a1;//Zeit bis zum Erreichen der maximal Geschwindigkeit 
-    sVMax = 0.5 * a1 * (tVMax * tVMax);//zurückgelegte Strecke bis Vmax
-
-    cout << "Die Zeit bis Vmax: " << tVMax << endl;
-    cout << "Die Laenge bis Vmax: " << sVMax << endl;
-
-    if (sVMax < 1 / 2 * sAbschnitte) { //falls die Höchstgeschwindigkeit nicht erreicht wird
-
-        tAbschnitt = 2 * sqrt((2 * 1 / 2 * sAbschnitte) / a1); //s=1/2*a*t^2, zweimal ein halben Abschnitt, da beschleunigung und bremsen
-        tEnde = sqrt((2 * sAbschnitte) / a1);
-         
-        t = (anzahlAbschnitte - 1) * tAbschnitt + tEnde;
-
-    }
-    else if (sVMax > 1 / 2 * sAbschnitte) {
-        tAbschnitt = 2 * tVMax + ((sAbschnitte - 2 * sVMax) / vMax); //Abschnittszeit: 2 x Zeit für Beschleunigen und einmal Zeit für die Strecke der maximal Geschwindigkeit 
-        tEnde = tVMax + ((sAbschnitte - sVMax) / vMax);
-
-        t = (anzahlAbschnitte - 1) * tAbschnitt + tEnde;
-    }
-
-    cout << "Zeit fuer die Abschnitte: " << tAbschnitt << " Sekunden" << endl;
-    cout << "Zeit fuer das Ende: " << tEnde << " Sekunden" << endl;
-    cout << "Das Auto benoetigt " << t << " Sekunden fuer die " << s << " Meter lange Strecke.";
-
-    
-}
-*/
-
-
 //Sadik
 #include <iostream>   
 #include <cstdlib>    //Für Zufallszahlen
@@ -220,22 +68,22 @@ public:
         return stream.str();
     }
 };
-
 */
 
 int main(){
     
- 
 
-    //int Streckelaenge;
     /*
-    
+    //Das Kommt in die Main Funktion 
+
+
     sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Fahrtvergleich");
     window.setFramerateLimit(60);
     tgui::Gui gui{ window };
 
 
-    // Label 1 und Box 1 // Aufgabe //
+    // Label 1 und BoxStreckenlaenge 
+
     tgui::Label::Ptr Label1 = tgui::Label::create();
     Label1->setPosition(50.f, 113.f);
     Label1->setSize(210, 20);
@@ -246,18 +94,18 @@ int main(){
     Label1->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
     gui.add(Label1);
 
-    tgui::EditBox::Ptr Streckelaenge = tgui::EditBox::create();
-    Streckelaenge->setDefaultText("Ganzahlig");
-    Streckelaenge->setPosition(50.f, 130.f);
-    Streckelaenge->setSize(150, 22);
-    Streckelaenge->setTextSize(13);
-    Streckelaenge->setMaximumCharacters(5); // Muss nicht immer dabei sein macht aber sinn dann können wir gut begrenzen
-    Streckelaenge->getRenderer()->setBackgroundColor(sf::Color::White);
-    Streckelaenge->getRenderer()->setBorders(1);
-    Streckelaenge->getRenderer()->setTextColor(sf::Color::Black);
-    gui.add(Streckelaenge);
+    tgui::EditBox::Ptr BoxStreckelaenge = tgui::EditBox::create();
+    BoxStreckelaenge->setDefaultText("Ganzahlig");
+    BoxStreckelaenge->setPosition(50.f, 130.f);
+    BoxStreckelaenge->setSize(150, 22);
+    BoxStreckelaenge->setTextSize(13);
+    BoxStreckelaenge->setMaximumCharacters(5); // Muss nicht immer dabei sein macht aber sinn dann können wir gut begrenzen
+    BoxStreckelaenge->getRenderer()->setBackgroundColor(sf::Color::White);
+    BoxStreckelaenge->getRenderer()->setBorders(1);
+    BoxStreckelaenge->getRenderer()->setTextColor(sf::Color::Black);
+    gui.add(BoxStreckelaenge);
 
-    // Label 2 und Box 2 // Aufgabe //
+    // Label 2 und Boxeingabe
 
     tgui::Label::Ptr Label2 = tgui::Label::create();
     Label2->setPosition(50.f, 163.f);
@@ -269,19 +117,19 @@ int main(){
     Label2->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
     gui.add(Label2);
 
-    tgui::EditBox::Ptr eingabe = tgui::EditBox::create();
-    eingabe->setDefaultText("1 oder 2");
-    eingabe->setPosition(50.f, 180.f);
-    eingabe->setSize(150, 22);
-    eingabe->setTextSize(13);
-    eingabe->setMaximumCharacters(1);
-    eingabe->getRenderer()->setBackgroundColor(sf::Color::White);
-    eingabe->getRenderer()->setBorders(1);
-    eingabe->getRenderer()->setTextColor(sf::Color::Black);
-    gui.add(eingabe);
+    tgui::EditBox::Ptr Boxeingabe = tgui::EditBox::create();
+    Boxeingabe->setDefaultText("1 oder 2");
+    Boxeingabe->setPosition(50.f, 180.f);
+    Boxeingabe->setSize(150, 22);
+    Boxeingabe->setTextSize(13);
+    Boxeingabe->setMaximumCharacters(1);
+    Boxeingabe->getRenderer()->setBackgroundColor(sf::Color::White);
+    Boxeingabe->getRenderer()->setBorders(1);
+    Boxeingabe->getRenderer()->setTextColor(sf::Color::Black);
+    gui.add(Boxeingabe);
 
-    
-    // Label 3 und Box 3 // Aufgabe //
+
+    // Label 3 und BoxAbstand
 
     tgui::Label::Ptr Label3 = tgui::Label::create();
     Label3->setPosition(50.f, 213.f);
@@ -293,39 +141,33 @@ int main(){
     Label3->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
     gui.add(Label3);
 
-    tgui::EditBox::Ptr Abstand = tgui::EditBox::create();
-    Abstand->setDefaultText("Ganzahlig");
-    Abstand->setPosition(50.f, 230.f);
-    Abstand->setSize(150, 22);
-    Abstand->setTextSize(13);
-    Abstand->setMaximumCharacters(4);
-    Abstand->getRenderer()->setBackgroundColor(sf::Color::White);
-    Abstand->getRenderer()->setBorders(1);
-    Abstand->getRenderer()->setTextColor(sf::Color::Black);
-    gui.add(Abstand);
+    tgui::EditBox::Ptr BoxAbstand = tgui::EditBox::create();
+    BoxAbstand->setDefaultText("Ganzahlig");
+    BoxAbstand->setPosition(50.f, 230.f);
+    BoxAbstand->setSize(150, 22);
+    BoxAbstand->setTextSize(13);
+    BoxAbstand->setMaximumCharacters(4);
+    BoxAbstand->getRenderer()->setBackgroundColor(sf::Color::White);
+    BoxAbstand->getRenderer()->setBorders(1);
+    BoxAbstand->getRenderer()->setTextColor(sf::Color::Black);
+    gui.add(BoxAbstand);
 
+    //Button1
+    tgui::Button::Ptr Button1 = tgui::Label::create();
+    Button1->setPosition(100.f, 380.f);
+    Button1->setText("Auswerten");
+    Button1->setTextSize(13);
+    Button1->getRenderer()->setBackgroundColor(sf::Color::White);
+    Button1->getRenderer()->setBorders(1);
+    Button1->getRenderer()->setTextColor(sf::Color::Black);
+    Button1->connect("pressed", [&]()
+        {
+            Streckelaenge = StringConverter::toInt(BoxStreckelaenge->getText());
+            eingabe = StringConverter::toInt(Boxeingabe->getText());
+            Abstand = StringConverter::toInt(BoxAbstand->getText());
+        });
+    gui.add(Button1);
 
-    // Label für die Ausgabe
-    tgui::Label::Ptr acc = tgui::Label::create();
-    acc->setPosition(370.f, 130.f);
-    acc->setSize(500, 30);
-    acc->setTextSize(16);
-    acc->setText("");
-    acc->getRenderer()->setTextColor(sf::Color::Black);
-    acc->getRenderer()->setBorders(0);
-    acc->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
-    gui.add(acc);
-
-    // Label für die Ausgabe
-    tgui::Label::Ptr gesamtzeit = tgui::Label::create();
-    gesamtzeit->setPosition(370.f, 130.f);
-    gesamtzeit->setSize(500, 30);
-    gesamtzeit->setTextSize(16);
-    gesamtzeit->setText("");
-    gesamtzeit->getRenderer()->setTextColor(sf::Color::Black);
-    gesamtzeit->getRenderer()->setBorders(0);
-    gesamtzeit->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
-    gui.add(gesamtzeit);
 
     while (window.isOpen())
     {
@@ -342,9 +184,7 @@ int main(){
         gui.draw();
         window.display();
     }
-    
     */
-    
     
 
     locale::global(locale("German_germany"));           //Umlaute und Potenzen in der Konsole richtig anzeigen
@@ -545,87 +385,3 @@ return 0;
 
 
 }
-
-
-
-
-/*
-pair<int, bool> Schaltung() {    //50/50 Ampel entweder rot oder grün
-    bool grün = rand() % 2; //  0 = false (Ampel rot) , 1 = true (Ampel grün)
-    int ZufallSekunden = 0;
-
-    if (!grün) {
-        ZufallSekunden = rand() % 21 + 10; // Zufällige Wartezeit zwischen 10 und 30 Sekunden generieren
-    }
-
-    return make_pair(ZufallSekunden, grün);
-}
-
-*/
-
-        /*    "Grüne Welle" Versuch (klappt nicht)
-             pair<int, bool> result = Schaltung();
-             int ZufallSekunden = result.first; //Ampelzeit
-             bool grün = result.second;    //Ampel grün oder nicht
-
-             cout << AktuelleAmpel << endl;
-             if (grün) {
-                 cout << "Ampel ist gruen." << endl;
-             }
-             else {
-                 cout << "Ampel ist rot. Wartezeit: " << ZufallSekunden << " Sekunden." << endl;
-             }
-
-             Distanz = AmpelPosition[AktuelleAmpel] - PKW_A.Aktuelle_Position;
-             t_acc = ((PKW_A.Vmax/3.6) / PKW_A.NeueBeschleunigung);
-             s_acc = 0.5 * PKW_A.NeueBeschleunigung * (t_acc * t_acc);
-
-             if (Distanz >= 2 * s_acc) { //falls vmax erreicht wird
-
-                 if (!grün) { //Ampel Rot
-                     cout << "ifif" << endl;
-                     s_brake = s_acc;
-                     t_brake = t_acc;
-                     s_vmax = Distanz - s_acc - s_brake;
-                     t_vmax = sqrt((2 * s_vmax) / PKW_A.NeueBeschleunigung);
-                     zwischenzeit = t_acc + t_vmax + t_brake + ZufallSekunden;
-                     gesamtzeit = gesamtzeit + zwischenzeit;
-                     AktuelleAmpel++;
-                     //debug cout << s_vmax << "Strecke mit vmax" << t_vmax << "Zeit mit vmax" << endl;
-                 }
-                 else { //Ampel Grün
-                     cout << "ifelse" << endl;
-                     s_vmax = Distanz - s_acc;
-                     t_vmax = s_vmax / (PKW_A.Vmax / 3.6);
-
-                     zwischenzeit = t_acc + t_vmax; //
-                     gesamtzeit = gesamtzeit + zwischenzeit;
-                     cout << s_vmax << "Strecke mit vmax" << t_vmax << "Zeit mit vmax" << endl;
-
-                     while (grün) {
-
-                         PKW_A.Aktuelle_Position = AmpelPosition[AktuelleAmpel];
-                         Distanz = AmpelPosition[AktuelleAmpel] - PKW_A.Aktuelle_Position;
-                         t_vmax = Distanz / (PKW_A.Vmax / 3.6);
-                         AktuelleAmpel++;
-                     }
-                 }
-             }
-
-             else {
-                 if (!grün) { // Ampel Rot (vmax wird nicht erreicht)
-                     cout << "else" << endl;
-                     float s_acc2 = 0.5 * Distanz;
-                     float t_acc2 = sqrt((2 * s_acc2) / PKW_A.NeueBeschleunigung);
-                     float t_brake2 = t_acc2;
-                     zwischenzeit = t_acc2 + t_brake2 + ZufallSekunden;
-                     gesamtzeit = gesamtzeit + zwischenzeit;
-
-                 }
-             }
-
-             cout << gesamtzeit << endl;
-             PKW_A.Aktuelle_Position = AmpelPosition[AktuelleAmpel];
-             AktuelleAmpel++;
-         */
- 
