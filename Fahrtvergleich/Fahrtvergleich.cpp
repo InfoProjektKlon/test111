@@ -49,7 +49,7 @@ int Schaltung() {    //Zufällige Ampelzeit zwischen min und max
     return t_ampel;
 }
 
-/*
+
 const int window_width = 800;
 const int window_height = 600;
 class StringConverter
@@ -68,12 +68,12 @@ public:
         return stream.str();
     }
 };
-*/
+
 
 int main(){
     
 
-    /*
+    
     //Das Kommt in die Main Funktion 
 
 
@@ -153,7 +153,7 @@ int main(){
     gui.add(BoxAbstand);
 
     //Button1
-    tgui::Button::Ptr Button1 = tgui::Label::create();
+    tgui::Button::Ptr Button1 = tgui::Button::create();
     Button1->setPosition(100.f, 380.f);
     Button1->setText("Auswerten");
     Button1->setTextSize(13);
@@ -162,7 +162,10 @@ int main(){
     Button1->getRenderer()->setTextColor(sf::Color::Black);
     Button1->connect("pressed", [&]()
         {
-            Streckelaenge = StringConverter::toInt(BoxStreckelaenge->getText());
+            int Streckenlaenge;
+            int eingabe;
+            int Abstand;
+            Streckenlaenge = StringConverter::toInt(BoxStreckelaenge->getText());
             eingabe = StringConverter::toInt(Boxeingabe->getText());
             Abstand = StringConverter::toInt(BoxAbstand->getText());
         });
@@ -184,7 +187,7 @@ int main(){
         gui.draw();
         window.display();
     }
-    */
+    
     
 
     locale::global(locale("German_germany"));           //Umlaute und Potenzen in der Konsole richtig anzeigen
