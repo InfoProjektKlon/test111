@@ -1,4 +1,3 @@
-// Sadik
 #include <iostream>
 #include <cstdlib> //Für Zufallszahlen
 #include <cmath>   //Verwenden von sqrt
@@ -301,6 +300,10 @@ int main()
     BoxAbstand->getRenderer()->setTextColor(sf::Color::Black);
     gui.add(BoxAbstand);
 
+    int Ampelanzahl = 0;
+    int AmpelPosition[200];  // Absolute Position aller Ampeln auf der Gesamten Strecke
+
+
     //Button1
     tgui::Button::Ptr Button1 = tgui::Button::create();
     Button1->setPosition(100.f, 380.f);
@@ -311,15 +314,100 @@ int main()
     Button1->getRenderer()->setTextColor(sf::Color::Black);
     Button1->connect("pressed", [&]()
         {
-            int Streckelaenge;
+
             int eingabe;
             int Abstand;
-            Streckelaenge = StringConverter::toInt(BoxStreckelaenge->getText());
+            int Streckenlaenge;
+
             eingabe = StringConverter::toInt(Boxeingabe->getText());
             Abstand = StringConverter::toInt(BoxAbstand->getText());
+            Streckenlaenge = StringConverter::toInt(BoxStreckelaenge->getText());
+            srand(time(NULL));                        // Neuer Seed. Nutzung der Systemzeit zur Generierung von Zufallszahlen.
+          //  int Streckenlaenge = StreckenLange();
+
+          /*
+            do
+            {
+                cout << "Ampelabstand selber eingeben oder durch zufall. 1 fuer zufall 2 fuer selber:";
+                cin >> eingabe;
+                if (eingabe != 1 && eingabe != 2)
+                {
+                    cout << "Fehlerhafte eingabe" << endl;
+                }
+
+            } while (eingabe != 1 && eingabe != 2); // Schleife wird solange durchlaufen bis 1 oder 2 ausgewählt wird vom Benutzer
+          */
+
+            int StreckenCounter = 0; // Streckenzähler um zu bestimmen wie lange die Schleifen laufen sollen
+
+
+            if (eingabe == 1) // Zufällig
+            {
+
+                while (StreckenCounter < Streckenlaenge - 250)
+                {
+
+                    StreckenCounter += AmpelAbstand_random();     // Aufsummieren der Ampelabstände auf den Strecken"zähler"
+                    AmpelPosition[Ampelanzahl] = StreckenCounter; // Absolute Ampelposition(Strecke zwischen Ampel und Nullpunkt)
+                    // cout << AmpelPosition[Ampelanzahl] << endl;
+                    //  debug    cout << StreckenCounter<< endl;
+                    Ampelanzahl++; // erhöht Ampelanzahl um 1
+                    if (StreckenCounter > Streckenlaenge - 250)
+                    { // Platziert letzte Ampel auf s-150m falls Benutzer einen größeren Wert eingibt
+                        Ampelanzahl--;
+                        AmpelPosition[Ampelanzahl] = Streckenlaenge - 150;
+                        break;
+                    }
+                }
+            }
+
+            if (eingabe == 2) // Benutzereingabe
+            {
+
+                int Abstand = 0; // Ampelabstand
+                while (1)
+                {
+                    AmpelPosition[Ampelanzahl];
+                    cout << "Abstand eingeben, zwischen 100m und 1500m:" << endl;
+                    cin >> Abstand;
+
+                    if (Abstand >= 100 && Abstand <= 1500)
+                    {
+
+                        StreckenCounter += Abstand;
+                        AmpelPosition[Ampelanzahl] = StreckenCounter;
+                        cout << "Noch " << Streckenlaenge - AmpelPosition[Ampelanzahl] << " meter bis zum ende der Strecke" << endl;
+                        Ampelanzahl++;
+                    }
+                    else
+                    {
+                        cout << "Ampelabstand ungueltig" << endl;
+                    }
+                    if (StreckenCounter > Streckenlaenge - 250)
+                    {
+                        Ampelanzahl--;
+                        AmpelPosition[Ampelanzahl] = Streckenlaenge - 150;
+                        cout << "Letzte Ampel bei " << Streckenlaenge - 150 << " metern" << endl;
+                        break;
+                    }
+                }
+            }
+            float* Gesamtzeiten = Berechne(AmpelPosition, Ampelanzahl); // Für das GUI die 9 Einträge des Arrays abrufen
+
+
+
         });
     gui.add(Button1);
 
+    tgui::Label::Ptr Label4 = tgui::Label::create();
+    Label4->setPosition(50.f, 213.f);
+    Label4->setSize(210, 20);
+    Label4->setTextSize(13);
+    Label4->setText("Abstand eingeben, zwischen 100m und 1500m:");
+    Label4->getRenderer()->setTextColor(sf::Color::Black);
+    Label4->getRenderer()->setBorders(0);
+    Label4->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
+    gui.add(Label4);
 
     while (window.isOpen())
     {
@@ -337,16 +425,17 @@ int main()
         window.display();
     }
 
+    /*
     int Ampelanzahl = 0;
     int AmpelPosition[200];  // Absolute Position aller Ampeln auf der Gesamten Strecke
+    */
+    //  locale::global(locale("German_germany")); // Umlaute und Potenzen in der Konsole richtig anzeigen
 
-  //  locale::global(locale("German_germany")); // Umlaute und Potenzen in der Konsole richtig anzeigen
-
-
+    /*
     srand(time(NULL));                        // Neuer Seed. Nutzung der Systemzeit zur Generierung von Zufallszahlen.
     int Streckenlaenge = StreckenLange();
 
-    int eingabe; // lokal 
+    int eingabe; // lokal
     do
     {
         cout << "Ampelabstand selber eingeben oder durch zufall. 1 fuer zufall 2 fuer selber:";
@@ -412,13 +501,11 @@ int main()
             }
         }
     }
+    */
 
 
 
-    float* Gesamtzeiten = Berechne(AmpelPosition, Ampelanzahl); // Für das GUI die 9 Einträge des Arrays abrufen
-
-
-
+    //float* Gesamtzeiten = Berechne(AmpelPosition, Ampelanzahl); // Für das GUI die 9 Einträge des Arrays abrufen
 
 
 
