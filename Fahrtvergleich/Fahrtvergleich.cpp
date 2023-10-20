@@ -66,6 +66,7 @@ void AmpelPositionen_Zufall(int& eingabe, int& Ampelanzahl, int AmpelPosition[],
     }
 }
 
+/*  Jeden Ampelabstand einzelnd eingeben. Konnt im GUI nicht umgesetzt werden.
 void AmpelPosition_Benutzer(int& eingabe, int& Ampelanzahl, int AmpelPosition[], int Streckenlaenge)
 {
     int StreckenCounter = 0;
@@ -99,6 +100,7 @@ void AmpelPosition_Benutzer(int& eingabe, int& Ampelanzahl, int AmpelPosition[],
     }
 
 }
+*/
 
 
 
@@ -149,12 +151,12 @@ float* BerechneZeiten(int* AmpelPosition, int& Ampelanzahl)
     float s_brake2; // Bremsweg bei kurzer Distanz
     float t_brake2; // Bremszeit s.o
 
-    for (int i = 0; i < Ampelanzahl + 1; i++)
-    { // Erzeugt alle Ampelzeiten für die Zeitberechnung.
+    for (int i = 0; i < Ampelanzahl + 1; i++) // Erzeugt alle Ampelzeiten für die Zeitberechnung.
+    { 
         ampelzeit[i] = Schaltung();
     }
-    for (int PKWIndex = 1; PKWIndex <= 3; PKWIndex++)
-    { // Fahrer A,B,C fahren nacheinander durch die strecke
+    for (int PKWIndex = 1; PKWIndex <= 3; PKWIndex++) // Fahrer A,B,C fahren nacheinander durch die strecke
+    { 
         float vmax;
         switch (PKWIndex)
         {
@@ -178,8 +180,8 @@ float* BerechneZeiten(int* AmpelPosition, int& Ampelanzahl)
             break;
         }
 
-        for (int accIndex = 1; accIndex <= 3; accIndex++)
-        { // 3 Beschleunigungen pro Fahrer
+        for (int accIndex = 1; accIndex <= 3; accIndex++) // 3 Beschleunigungen pro Fahrer
+        { 
             float acc;
             switch (accIndex)
             {
@@ -197,8 +199,8 @@ float* BerechneZeiten(int* AmpelPosition, int& Ampelanzahl)
                 break;
             }
 
-            while (aktuelle_ampel <= Ampelanzahl)
-            { // Streckenabschnittsweise berechnung bis zur letzten Ampel
+            while (aktuelle_ampel <= Ampelanzahl)// Streckenabschnittsweise berechnung bis zur letzten Ampel
+            { 
                 Distanz = AmpelPosition[aktuelle_ampel] - aktuelle_Position;
                 t_acc = vmax / (3.6 * acc);
                 s_acc = 0.5 * acc * (t_acc * t_acc); // S=1/2*a*t²
@@ -280,25 +282,15 @@ int main()
     tgui::Gui gui{ window };
 
     locale::global(locale("German_germany")); // Umlaute und Potenzen in der Konsole richtig anzeigen
-    /*
-    tgui::Label::Ptr Abstandsanzeige = tgui::Label::create();
-    Abstandsanzeige->setPosition(50.f, 260.f);
-    Abstandsanzeige->setSize(250, 20);
-    Abstandsanzeige->setTextSize(13);
-    Abstandsanzeige->getRenderer()->setBackgroundColor(sf::Color::White);
-    Abstandsanzeige->getRenderer()->setBorders(1);
-    Abstandsanzeige->getRenderer()->setTextColor(sf::Color::Black);
-    gui.add(Abstandsanzeige);
-    */
 
-    std::vector<tgui::Label::Ptr> Zeiten(9);
 
+    std::vector<tgui::Label::Ptr> Zeiten(9);  // 9 Boxen für die Ergebnisse erstellen
     for (int i = 0; i < 9; i++) {
 
 
         Zeiten[i] = tgui::Label::create();
-        Zeiten[i]->setPosition(450.f, 30.f + i * 30.f);
-        Zeiten[i]->setSize(100, 20);
+        Zeiten[i]->setPosition(650.f, 30.f + i * 30.f);
+        Zeiten[i]->setSize(110, 20);
         Zeiten[i]->setTextSize(13);
         Zeiten[i]->getRenderer()->setBackgroundColor(sf::Color::White);
         Zeiten[i]->getRenderer()->setBorders(1);
@@ -336,8 +328,8 @@ int main()
     int AmpelPosition[200];  // Absolute Position aller Ampeln auf der Gesamten Strecke
 
 
-    //Button1
-    tgui::Button::Ptr Button1 = tgui::Button::create();
+
+    tgui::Button::Ptr Button1 = tgui::Button::create();     //Zufällige Berechnung
     Button1->setPosition(100.f, 160.f);
     Button1->setText("Zufall");
     Button1->setTextSize(13);
@@ -352,23 +344,7 @@ int main()
             int eingabe = 1;
             srand(time(NULL));
 
-            /*
-            if (eingabe != 1 && eingabe != 2)
-            {
 
-                cout << "Fehlerhafte eingabe" << endl;
-                tgui::Label::Ptr Feedback = tgui::Label::create();
-                Feedback->setPosition(50.f, 450.f);
-                Feedback->setSize(210, 20);
-                Feedback->setTextSize(13);
-                Feedback->setText("Fehlerhafte Eingabe");
-                Feedback->getRenderer()->setTextColor(sf::Color::Black);
-                Feedback->getRenderer()->setBorders(0);
-                Feedback->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
-                gui.add(Feedback);
-
-            }
-            */
 
 
             AmpelPositionen_Zufall(eingabe, Ampelanzahl, AmpelPosition, Streckenlaenge);
@@ -376,7 +352,7 @@ int main()
 
 
 
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < 9; i++) {    //Eingeben der Ergebnisse in die Boxen
                 Zeiten[i]->setText(std::to_string(Gesamtzeiten[i]) + " s");
 
             }
@@ -387,9 +363,9 @@ int main()
 
     tgui::Label::Ptr Label2 = tgui::Label::create();
     Label2->setPosition(50.f, 263.f);
-    Label2->setSize(150, 20);
+    Label2->setSize(350, 20);
     Label2->setTextSize(13);
-    Label2->setText("Ampelabstand eingeben");
+    Label2->setText("Ampelabstand fue alle Ampeln eingeben");
     Label2->getRenderer()->setTextColor(sf::Color::Black);
     Label2->getRenderer()->setBorders(0);
     Label2->getRenderer()->setBackgroundColor(sf::Color(195, 195, 195, 255));
@@ -407,7 +383,7 @@ int main()
     gui.add(BoxAmpelabstand);
 
 
-    tgui::Button::Ptr Button2 = tgui::Button::create();
+    tgui::Button::Ptr Button2 = tgui::Button::create();   // Benutzer gibt alle Ampelabstände an
     Button2->setPosition(100.f, 310.f);
     Button2->setText("Benutzer");
     Button2->setTextSize(13);
@@ -481,4 +457,5 @@ int main()
         window.display();
     }
     return 0;
-}}
+}
+
