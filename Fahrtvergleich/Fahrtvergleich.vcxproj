@@ -152,10 +152,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Fahrtvergleich.cpp" />
-    <ClCompile Include="GUI_class.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GUI_class.h" />
+    <ClInclude Include="Fahrtvergleich.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
